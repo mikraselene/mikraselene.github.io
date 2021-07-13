@@ -19,30 +19,35 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="随便写点什么东西吧">
-<meta property="og:type" content="website">
+  <meta name="description" content="这篇文章记录了我做 MIT6.828 的过程和心得. 如果您具备阅读英文程度的能力, 可以点击这里查看原 lab 网页. 追寻特大型 OS 内核之谜 Stage 1 PC 机的引导启动从 x86 汇编语言开始…如果之前对 x86 汇编没什么了解, 可以看这本手册快速入门.   练习 I\熟悉 x86 汇编语言, 可以首先阅读一下参考资料. 也推荐阅读这本描述了 AT&amp;T 汇编语法的手册.">
+<meta property="og:type" content="article">
 <meta property="og:title" content="MikraSelene">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/2021/07/13/kernel/1/index.html">
 <meta property="og:site_name" content="MikraSelene">
-<meta property="og:description" content="随便写点什么东西吧">
+<meta property="og:description" content="这篇文章记录了我做 MIT6.828 的过程和心得. 如果您具备阅读英文程度的能力, 可以点击这里查看原 lab 网页. 追寻特大型 OS 内核之谜 Stage 1 PC 机的引导启动从 x86 汇编语言开始…如果之前对 x86 汇编没什么了解, 可以看这本手册快速入门.   练习 I\熟悉 x86 汇编语言, 可以首先阅读一下参考资料. 也推荐阅读这本描述了 AT&amp;T 汇编语法的手册.">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2021/07/13/kernel/1/kernel.png">
+<meta property="og:image" content="http://yoursite.com/2021/07/13/kernel/1/color.png">
+<meta property="article:published_time" content="2021-07-13T05:07:50.206Z">
+<meta property="article:modified_time" content="2021-07-13T06:20:10.560Z">
 <meta property="article:author" content="Mikraselene">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2021/07/13/kernel/1/kernel.png">
 
-<link rel="canonical" href="http://yoursite.com/">
+<link rel="canonical" href="http://yoursite.com/2021/07/13/kernel/1/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>MikraSelene</title>
+  <title> | MikraSelene</title>
   
 
 
@@ -152,9 +157,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -170,10 +176,9 @@
       <meta itemprop="name" content="MikraSelene">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2021/07/13/kernel/1/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -197,7 +202,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><strong>这篇文章记录了我做 MIT6.828 的过程和心得. 如果您具备<a target="_blank" rel="noopener" href="https://thwiki.cc/本居小铃">阅读英文程度的能力</a>, 可以点击<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2018/labs/lab1">这里</a>查看原 lab 网页.</strong></p>
+        <p><strong>这篇文章记录了我做 MIT6.828 的过程和心得. 如果您具备<a target="_blank" rel="noopener" href="https://thwiki.cc/本居小铃">阅读英文程度的能力</a>, 可以点击<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2018/labs/lab1">这里</a>查看原 lab 网页.</strong></p>
 <h1 id="追寻特大型-OS-内核之谜-Stage-1"><a href="#追寻特大型-OS-内核之谜-Stage-1" class="headerlink" title="追寻特大型 OS 内核之谜 Stage 1"></a>追寻特大型 OS 内核之谜 Stage 1</h1><p><img src="/2021/07/13/kernel/1/kernel.png" alt="avatar"></p>
 <h2 id="PC-机的引导启动"><a href="#PC-机的引导启动" class="headerlink" title="PC 机的引导启动"></a>PC 机的引导启动</h2><h3 id="从-x86-汇编语言开始…"><a href="#从-x86-汇编语言开始…" class="headerlink" title="从 x86 汇编语言开始…"></a>从 x86 汇编语言开始…</h3><p>如果之前对 x86 汇编没什么了解, 可以看<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2018/readings/pcasm-book.pdf">这本手册</a>快速入门. </p>
 <blockquote>
@@ -503,350 +508,30 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">lab$ make grade</span><br><span class="line">&#x2F;Library&#x2F;Developer&#x2F;CommandLineTools&#x2F;usr&#x2F;bin&#x2F;make clean</span><br><span class="line">rm -rf obj .gdbinit jos.in qemu.log</span><br><span class="line">.&#x2F;grade-lab1 </span><br><span class="line">+ as kern&#x2F;entry.S</span><br><span class="line">+ cc kern&#x2F;entrypgdir.c</span><br><span class="line">+ cc kern&#x2F;init.c</span><br><span class="line">+ cc kern&#x2F;console.c</span><br><span class="line">+ cc kern&#x2F;monitor.c</span><br><span class="line">+ cc kern&#x2F;printf.c</span><br><span class="line">+ cc kern&#x2F;kdebug.c</span><br><span class="line">+ cc lib&#x2F;printfmt.c</span><br><span class="line">+ cc lib&#x2F;readline.c</span><br><span class="line">+ cc lib&#x2F;string.c</span><br><span class="line">+ ld obj&#x2F;kern&#x2F;kernel</span><br><span class="line">i386-elf-ld: warning: section &#96;.bss&#39; type changed to PROGBITS</span><br><span class="line">+ as boot&#x2F;boot.S</span><br><span class="line">+ cc -Os boot&#x2F;main.c</span><br><span class="line">+ ld boot&#x2F;boot</span><br><span class="line">boot block is 396 bytes (max 510)</span><br><span class="line">+ mk obj&#x2F;kern&#x2F;kernel.img</span><br><span class="line">running JOS: (0.6s) </span><br><span class="line">  printf: OK </span><br><span class="line">  backtrace count: OK </span><br><span class="line">  backtrace arguments: OK </span><br><span class="line">  backtrace symbols: OK </span><br><span class="line">  backtrace lines: OK </span><br><span class="line">Score: 50&#x2F;50</span><br></pre></td></tr></table></figure>
 <p>如果得分为满分, 则意味着本 lab 圆满完成, 可喜可贺.</p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/23/latin_translation/3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Mikraselene">
-      <meta itemprop="description" content="随便写点什么东西吧">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MikraSelene">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/23/latin_translation/3/" class="post-title-link" itemprop="url">《韦洛克拉丁语教程》古代名言翻译（三）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-08-23 15:10:40 / 修改时间：15:56:06" itemprop="dateCreated datePublished" datetime="2020-08-23T15:10:40+08:00">2020-08-23</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">语言</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="E-Latine-—-gt-Anglice"><a href="#E-Latine-—-gt-Anglice" class="headerlink" title="E*: Latine —&gt; Anglice  "></a>E*: Latine —&gt; Anglice  </h2><p><strong>1</strong>  </p>
-<blockquote>
-<p>Filium nautae Romani in agris videmus.  </p>
-</blockquote>
-<p>We see the son of a Roman sailor on the farm.  </p>
-<p><strong>2</strong></p>
-<blockquote>
-<p>Pueri puellas hodie vocant.  </p>
-</blockquote>
-<p>The boys are calling the girls today.  </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/08/23/latin_translation/3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/22/latin_translation/2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Mikraselene">
-      <meta itemprop="description" content="随便写点什么东西吧">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MikraSelene">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/22/latin_translation/2/" class="post-title-link" itemprop="url">《韦洛克拉丁语教程》古代名言翻译（二）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-08-22 19:08:57" itemprop="dateCreated datePublished" datetime="2020-08-22T19:08:57+08:00">2020-08-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-23 15:47:59" itemprop="dateModified" datetime="2020-08-23T15:47:59+08:00">2020-08-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">语言</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Latine-—-gt-Anglice"><a href="#Latine-—-gt-Anglice" class="headerlink" title="Latine —&gt; Anglice  "></a>Latine —&gt; Anglice  </h2><p><strong>1</strong>  </p>
-<blockquote>
-<p>Salve, O patria! (Plautus)  </p>
-</blockquote>
-<p>Hello, Oh fatherland!  </p>
-<p><strong>2</strong></p>
-<blockquote>
-<p>Fama et sententia volant. (Vergil)  </p>
-</blockquote>
-<p>Rumor and opinion fly.  </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/08/22/latin_translation/2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/23/latin_translation/3/" rel="prev" title="《韦洛克拉丁语教程》古代名言翻译（三）">
+      <i class="fa fa-chevron-left"></i> 《韦洛克拉丁语教程》古代名言翻译（三）
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/21/latin_translation/1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Mikraselene">
-      <meta itemprop="description" content="随便写点什么东西吧">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MikraSelene">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/21/latin_translation/1/" class="post-title-link" itemprop="url">《韦洛克拉丁语教程》古代名言翻译（一）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-08-21 22:22:24" itemprop="dateCreated datePublished" datetime="2020-08-21T22:22:24+08:00">2020-08-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-23 15:48:07" itemprop="dateModified" datetime="2020-08-23T15:48:07+08:00">2020-08-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">语言</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Latine-—-gt-Anglice"><a href="#Latine-—-gt-Anglice" class="headerlink" title="Latine —&gt; Anglice  "></a>Latine —&gt; Anglice  </h2><p><strong>1</strong>  </p>
-<blockquote>
-<p>Labor me vocat.  </p>
-</blockquote>
-<p>The worker calls me.<br>[Note the SOV word order.]  </p>
-<p><strong>2</strong>  </p>
-<blockquote>
-<p>Mone me, amabo te, si erro.  </p>
-</blockquote>
-<p>Please warn me if I make mistakes.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/08/21/latin_translation/1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/21/salve_munde/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="Mikraselene">
-      <meta itemprop="description" content="随便写点什么东西吧">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MikraSelene">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/21/salve_munde/" class="post-title-link" itemprop="url">Salve Munde</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-08-21 11:02:22" itemprop="dateCreated datePublished" datetime="2020-08-21T11:02:22+08:00">2020-08-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-23 00:21:46" itemprop="dateModified" datetime="2020-08-23T00:21:46+08:00">2020-08-23</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Salve Munde!</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
   
 
 
@@ -899,6 +584,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%BD%E5%AF%BB%E7%89%B9%E5%A4%A7%E5%9E%8B-OS-%E5%86%85%E6%A0%B8%E4%B9%8B%E8%B0%9C-Stage-1"><span class="nav-number">1.</span> <span class="nav-text">追寻特大型 OS 内核之谜 Stage 1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PC-%E6%9C%BA%E7%9A%84%E5%BC%95%E5%AF%BC%E5%90%AF%E5%8A%A8"><span class="nav-number">1.1.</span> <span class="nav-text">PC 机的引导启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E-x86-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%BC%80%E5%A7%8B%E2%80%A6"><span class="nav-number">1.1.1.</span> <span class="nav-text">从 x86 汇编语言开始…</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A8%A1%E6%8B%9F-x86"><span class="nav-number">1.1.2.</span> <span class="nav-text">使用虚拟机模拟 x86</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PC-%E6%9C%BA%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-number">1.1.3.</span> <span class="nav-text">PC 机的物理内存地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROM-BIOS"><span class="nav-number">1.1.4.</span> <span class="nav-text">ROM BIOS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%AF%BC%E5%8A%A0%E8%BD%BD%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.2.</span> <span class="nav-text">引导加载程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E5%86%85%E6%A0%B8"><span class="nav-number">1.2.1.</span> <span class="nav-text">加载内核</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E5%86%85%E6%A0%B8"><span class="nav-number">1.3.</span> <span class="nav-text">进入内核</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">1.3.1.</span> <span class="nav-text">虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA"><span class="nav-number">1.3.2.</span> <span class="nav-text">格式化输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A0%86%E6%A0%88"><span class="nav-number">1.3.3.</span> <span class="nav-text">堆栈</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%BE%97%E5%88%86"><span class="nav-number">1.4.</span> <span class="nav-text">查看得分</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
