@@ -19,20 +19,21 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="这篇文章记录了我做 MIT6.828 的过程和心得. 如果您具备阅读英文程度的能力, 可以点击这里查看原 lab 网页. 追寻特大型 OS 内核之谜 Stage 1 PC 机的引导启动从 x86 汇编语言开始…如果之前对 x86 汇编没什么了解, 可以看这本手册快速入门.   练习 I\熟悉 x86 汇编语言, 可以首先阅读一下参考资料. 也推荐阅读这本描述了 AT&amp;T 汇编语法的手册.">
+  <meta name="description" content="这篇文章记录了我做 MIT6.828 的过程和心得. 如果您具备阅读英文程度的能力, 可以点击这里查看原 lab 网页.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MikraSelene">
+<meta property="og:title" content="追寻特大型 OS 内核之谜 - Stage 1">
 <meta property="og:url" content="http://yoursite.com/2021/07/13/kernel/1/index.html">
 <meta property="og:site_name" content="MikraSelene">
-<meta property="og:description" content="这篇文章记录了我做 MIT6.828 的过程和心得. 如果您具备阅读英文程度的能力, 可以点击这里查看原 lab 网页. 追寻特大型 OS 内核之谜 Stage 1 PC 机的引导启动从 x86 汇编语言开始…如果之前对 x86 汇编没什么了解, 可以看这本手册快速入门.   练习 I\熟悉 x86 汇编语言, 可以首先阅读一下参考资料. 也推荐阅读这本描述了 AT&amp;T 汇编语法的手册.">
+<meta property="og:description" content="这篇文章记录了我做 MIT6.828 的过程和心得. 如果您具备阅读英文程度的能力, 可以点击这里查看原 lab 网页.">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2021/07/13/kernel/1/kernel.png">
-<meta property="og:image" content="http://yoursite.com/2021/07/13/kernel/1/color.png">
+<meta property="og:image" content="http://yoursite.com/images/kernel.png">
+<meta property="og:image" content="http://yoursite.com/images/color.png">
 <meta property="article:published_time" content="2021-07-13T05:07:50.206Z">
-<meta property="article:modified_time" content="2021-07-13T06:20:10.560Z">
+<meta property="article:modified_time" content="2021-07-13T07:01:45.189Z">
 <meta property="article:author" content="Mikraselene">
+<meta property="article:tag" content="操作系统">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2021/07/13/kernel/1/kernel.png">
+<meta name="twitter:image" content="http://yoursite.com/images/kernel.png">
 
 <link rel="canonical" href="http://yoursite.com/2021/07/13/kernel/1/">
 
@@ -47,7 +48,7 @@
   };
 </script>
 
-  <title> | MikraSelene</title>
+  <title>追寻特大型 OS 内核之谜 - Stage 1 | MikraSelene</title>
   
 
 
@@ -177,7 +178,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          追寻特大型 OS 内核之谜 - Stage 1
         </h1>
 
         <div class="post-meta">
@@ -188,7 +189,16 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-07-13 13:07:50 / 修改时间：14:20:10" itemprop="dateCreated datePublished" datetime="2021-07-13T13:07:50+08:00">2021-07-13</time>
+              <time title="创建时间：2021-07-13 13:07:50 / 修改时间：15:01:45" itemprop="dateCreated datePublished" datetime="2021-07-13T13:07:50+08:00">2021-07-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">计算机</span></a>
+                </span>
             </span>
 
           
@@ -203,10 +213,11 @@
 
       
         <p><strong>这篇文章记录了我做 MIT6.828 的过程和心得. 如果您具备<a target="_blank" rel="noopener" href="https://thwiki.cc/本居小铃">阅读英文程度的能力</a>, 可以点击<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2018/labs/lab1">这里</a>查看原 lab 网页.</strong></p>
-<h1 id="追寻特大型-OS-内核之谜-Stage-1"><a href="#追寻特大型-OS-内核之谜-Stage-1" class="headerlink" title="追寻特大型 OS 内核之谜 Stage 1"></a>追寻特大型 OS 内核之谜 Stage 1</h1><p><img src="/2021/07/13/kernel/1/kernel.png" alt="avatar"></p>
+<p><img src="/images/kernel.png" alt="avatar"></p>
+<a id="more"></a>
 <h2 id="PC-机的引导启动"><a href="#PC-机的引导启动" class="headerlink" title="PC 机的引导启动"></a>PC 机的引导启动</h2><h3 id="从-x86-汇编语言开始…"><a href="#从-x86-汇编语言开始…" class="headerlink" title="从 x86 汇编语言开始…"></a>从 x86 汇编语言开始…</h3><p>如果之前对 x86 汇编没什么了解, 可以看<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2018/readings/pcasm-book.pdf">这本手册</a>快速入门. </p>
 <blockquote>
-<p><strong>练习 I</strong>\<br>熟悉 x86 汇编语言, 可以首先阅读一下<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2018/reference.html">参考资料</a>. 也推荐阅读<a target="_blank" rel="noopener" href="http://www.delorie.com/djgpp/doc/brennan/brennan_att_inline_djgpp.html">这本描述了 AT&amp;T 汇编语法的手册</a>.</p>
+<p><strong>练习 I</strong><br>熟悉 x86 汇编语言, 可以首先阅读一下<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2018/reference.html">参考资料</a>. 也推荐阅读<a target="_blank" rel="noopener" href="http://www.delorie.com/djgpp/doc/brennan/brennan_att_inline_djgpp.html">这本描述了 AT&amp;T 汇编语法的手册</a>.</p>
 </blockquote>
 <h3 id="使用虚拟机模拟-x86"><a href="#使用虚拟机模拟-x86" class="headerlink" title="使用虚拟机模拟 x86"></a>使用虚拟机模拟 x86</h3><p>本 lab 中我们使用 QEMU 虚拟机来运行内核, 使用 GDB 进行调试. 实验平台推荐 Linux 系统, MacOS 也可以, 不过要对 GNUmakefile 进行一些修改. <em>其实我感觉最难的一步就是编译运行了…</em></p>
 <p>首先把 lab1 的实验代码下载到本机.</p>
@@ -230,15 +241,84 @@
 <ul>
 <li>PC 机从物理内存 0x000ffff0 处启动 (可以再看下上面的物理内存布局图).</li>
 <li>PC 机启动时, <code>CS:IP</code> = 0xf000:0xfff0.</li>
-<li>第一条指令是 jmp 指令, 跳到 <code>CS:IP</code> = 0xf000:0xe05b.</li>
+<li>第一条指令是 <code>jmp</code> 指令, 跳到 <code>CS:IP</code> = 0xf000:0xe05b.</li>
 </ul>
 <blockquote>
-<p><strong>练习 II</strong>\<br>使用 GDB 的 <code>si</code> (i.e. <strong>S</strong>tep <strong>I</strong>nstruction) 命令来进入 ROM BIOS 追踪指令. 不需要详细了解所有细节, 只需要大致明白 BIOS 在做什么就行.</p>
+<p><strong>练习 II</strong><br>使用 GDB 的 <code>si</code> (i.e. <strong>S</strong>tep <strong>I</strong>nstruction) 命令来进入 ROM BIOS 追踪指令. 不需要详细了解所有细节, 只需要大致明白 BIOS 在做什么就行.</p>
 </blockquote>
-<p><strong>GDB 的常用命令</strong><br>|         命令         |            功能            |     补充      |<br>| :—————————: | :————————————: | :—————-: |<br>|   <code>break *&lt;addr&gt;</code>    |   在 <code>&lt;addr&gt;</code> 处设置断点   | 可缩写为 <code>b</code>  |<br>|       <code>stepi</code>        |    单步追踪一条机器指令    | 可缩写为 <code>si</code> |<br>|      <code>continue</code>      |      继续运行直到断点      | 可缩写为 <code>c</code>  |<br>| <code>x/&lt;n&gt;&lt;f&gt;&lt;u&gt; &lt;addr&gt;</code> | 查看 <code>&lt;addr&gt;</code> 处的内存信息 |       -       |</p>
+<p><strong>GDB 的常用命令</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">功能</th>
+<th style="text-align:center">补充</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>break *&lt;addr&gt;</code></td>
+<td style="text-align:center">在 <code>&lt;addr&gt;</code> 处设置断点</td>
+<td style="text-align:center">可缩写为 <code>b</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>stepi</code></td>
+<td style="text-align:center">单步追踪一条机器指令</td>
+<td style="text-align:center">可缩写为 <code>si</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>continue</code></td>
+<td style="text-align:center">继续运行直到断点</td>
+<td style="text-align:center">可缩写为 <code>c</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>x/&lt;n&gt;&lt;f&gt;&lt;u&gt; &lt;addr&gt;</code></td>
+<td style="text-align:center">查看 <code>&lt;addr&gt;</code> 处的内存信息</td>
+<td style="text-align:center">-</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h2 id="引导加载程序"><a href="#引导加载程序" class="headerlink" title="引导加载程序"></a>引导加载程序</h2><p>计算机的软盘和硬盘被分割成大小为 512B 的区域, 称为扇区。扇区是磁盘的最小传输粒度, 每个读取或写入操作必须以扇区为单位. 如果磁盘是可引导启动的, 第一个扇区就叫引导扇区 (Boot Sector), 因为引导加载程序就存储在这里. 当 BIOS 发现了可引导启动的磁盘, 它就把引导扇区加载到 0x7c00 到 0x7dff 的物理内存中, 然后把用 jmp 指令把 <code>CS:IP</code> 设为 0000:7c00, 把控制权传递给引导加载程序. </p>
 <p>引导加载程序包括一个汇编文件 boot/boot.S 和一个 C 文件 boot/main.c. 下面来仔细研究这些源文件.</p>
-<p><strong>I/O 端口访问函数</strong><br>|    函数    |                             作用                              |<br>| :————: | :—————————————————————————————-: |<br>|  <code>in*()</code>   |                    从 I/O 端口读取连续字节                    |<br>|  <code>out*()</code>  |                    向 I/O 端口写入连续字节                    |<br>| <code>in*_p()</code>  |    从 I/O 端口读取连续字节, 然后执行 dummy 指令使 CPU 暂停    |<br>| <code>out*_p()</code> |    向 I/O 端口写入连续字节, 然后执行 dummy 指令使 CPU 暂停    |<br>|  <code>ins*()</code>  | 从 I/O 端口读取连续字节序列, 字节序列的长度由该函数的参数给出 |<br>| <code>outs*()</code>  | 向 I/O 端口写入连续字节序列, 字节序列的长度由该函数的参数给出 |</p>
+<p><strong>I/O 端口访问函数</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>in*()</code></td>
+<td style="text-align:center">从 I/O 端口读取连续字节</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>out*()</code></td>
+<td style="text-align:center">向 I/O 端口写入连续字节</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>in*_p()</code></td>
+<td style="text-align:center">从 I/O 端口读取连续字节, 然后执行 dummy 指令使 CPU 暂停</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>out*_p()</code></td>
+<td style="text-align:center">向 I/O 端口写入连续字节, 然后执行 dummy 指令使 CPU 暂停</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ins*()</code></td>
+<td style="text-align:center">从 I/O 端口读取连续字节序列, 字节序列的长度由该函数的参数给出</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>outs*()</code></td>
+<td style="text-align:center">向 I/O 端口写入连续字节序列, 字节序列的长度由该函数的参数给出</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>其中, <code>*</code> 可以为 <code>b</code> (字节, 1B), <code>w</code> (字, 2B), <code>l</code> (长整型, 4B).</p>
 <p>先观察 inc/elf.h 中的结构体. ELF 是 <strong>E</strong>xecutable and <strong>L</strong>inkable <strong>F</strong>ormat 的简称. 当编译和链接一个 C 程序的时候, 编译器将每个 C 源码文件 (.c) 转为一个对象文件 (.o), 对象文件中存放的是机器能理解的二进制格式的汇编语言指令. 然后, 链接器将所有对象文件结合为一个二进制映像文件，即 ELF 文件. </p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Elf</span> &#123;</span></span><br><span class="line">  <span class="keyword">uint32_t</span> e_magic; <span class="comment">// must equal ELF_MAGIC</span></span><br><span class="line">  <span class="keyword">uint8_t</span> e_elf[<span class="number">12</span>];</span><br><span class="line">  <span class="keyword">uint16_t</span> e_type;</span><br><span class="line">  <span class="keyword">uint16_t</span> e_machine;</span><br><span class="line">  <span class="keyword">uint32_t</span> e_version;</span><br><span class="line">  <span class="keyword">uint32_t</span> e_entry;</span><br><span class="line">  <span class="keyword">uint32_t</span> e_phoff; <span class="comment">// program header 偏移量</span></span><br><span class="line">  <span class="keyword">uint32_t</span> e_shoff; <span class="comment">// section header 偏移量</span></span><br><span class="line">  <span class="keyword">uint32_t</span> e_flags;</span><br><span class="line">  <span class="keyword">uint16_t</span> e_ehsize;</span><br><span class="line">  <span class="keyword">uint16_t</span> e_phentsize;</span><br><span class="line">  <span class="keyword">uint16_t</span> e_phnum;</span><br><span class="line">  <span class="keyword">uint16_t</span> e_shentsize;</span><br><span class="line">  <span class="keyword">uint16_t</span> e_shnum; <span class="comment">// section header number</span></span><br><span class="line">  <span class="keyword">uint16_t</span> e_shstrndx;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Proghdr</span> &#123;</span> <span class="comment">// program header, 程序头表</span></span><br><span class="line">  <span class="keyword">uint32_t</span> p_type;</span><br><span class="line">  <span class="keyword">uint32_t</span> p_offset; <span class="comment">// 相对于 ELF 文件开头的偏移量</span></span><br><span class="line">  <span class="keyword">uint32_t</span> p_va; <span class="comment">// 虚拟地址</span></span><br><span class="line">  <span class="keyword">uint32_t</span> p_pa; <span class="comment">// 物理地址</span></span><br><span class="line">  <span class="keyword">uint32_t</span> p_filesz;</span><br><span class="line">  <span class="keyword">uint32_t</span> p_memsz; <span class="comment">// 内存中的大小</span></span><br><span class="line">  <span class="keyword">uint32_t</span> p_flags; <span class="comment">// RWX 权限</span></span><br><span class="line">  <span class="keyword">uint32_t</span> p_align;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -246,7 +326,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bootmain</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ! ph = program header, eph = end of program header.</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">Proghdr</span> *<span class="title">ph</span>, *<span class="title">eph</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// read 1st page off disk</span></span><br><span class="line">  <span class="comment">// ! 从 0x0 处读 SECTSIZE * 8 = 4KB 大小的内容到 ELFHDR = 0x10000 处.</span></span><br><span class="line">  readseg((<span class="keyword">uint32_t</span>)ELFHDR, SECTSIZE * <span class="number">8</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// is this a valid ELF?</span></span><br><span class="line">  <span class="comment">// ! ELF 头表的 e_magic 字段必须等于 0x464c457fu, 无需理会这个神秘数字.</span></span><br><span class="line">  <span class="keyword">if</span> (ELFHDR-&gt;e_magic != ELF_MAGIC) <span class="keyword">goto</span> bad;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// load each program segment (ignores ph flags)</span></span><br><span class="line">  <span class="comment">// ! 程序头表起始位置 = ELF 头表的位置 + 程序头表偏移量 (指针加法).</span></span><br><span class="line">  <span class="comment">// ! 注意这里先强制转换成了 uint8_t * 指针, 加法是以 1B 为一个单位.</span></span><br><span class="line">  ph = (struct Proghdr *)((<span class="keyword">uint8_t</span> *)ELFHDR + ELFHDR-&gt;e_phoff);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ! 程序头表结束位置 = 程序头表的位置 + 程序头表数量 (指针加法). </span></span><br><span class="line">  eph = ph + ELFHDR-&gt;e_phnum;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (; ph &lt; eph; ph++)</span><br><span class="line">    <span class="comment">// p_pa is the load address of this segment (as well</span></span><br><span class="line">    <span class="comment">// as the physical address)</span></span><br><span class="line">    <span class="comment">// ! 从 p_offset 处读 p_memsz 大小的内容到物理地址 p_pa.</span></span><br><span class="line">    readseg(ph-&gt;p_pa, ph-&gt;p_memsz, ph-&gt;p_offset);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// call the entry point from the ELF header</span></span><br><span class="line">  <span class="comment">// note: does not return!</span></span><br><span class="line">  <span class="comment">// 把 e_entry 转换成了一个函数指针, 然后执行.</span></span><br><span class="line">  ((<span class="keyword">void</span> (*)(<span class="keyword">void</span>))(ELFHDR-&gt;e_entry))();</span><br><span class="line"></span><br><span class="line">bad:</span><br><span class="line">  outw(<span class="number">0x8A00</span>, <span class="number">0x8A00</span>);</span><br><span class="line">  outw(<span class="number">0x8A00</span>, <span class="number">0x8E00</span>);</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) <span class="comment">/* do nothing */</span></span><br><span class="line">    ;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">readseg</span><span class="params">(<span class="keyword">uint32_t</span> pa, <span class="keyword">uint32_t</span> count, <span class="keyword">uint32_t</span> offset)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">uint32_t</span> end_pa;</span><br><span class="line"></span><br><span class="line">  end_pa = pa + count;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// round down to sector boundary</span></span><br><span class="line">  <span class="comment">// ! 将物理地址 pa 按照扇区对齐 (后 9 位置 0).</span></span><br><span class="line">  <span class="comment">// ! 等同于 pa -= pa % SECTSIZE.</span></span><br><span class="line">  pa &amp;= ~(SECTSIZE - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// translate from bytes to sectors, and kernel starts at sector 1</span></span><br><span class="line">  <span class="comment">// ! 把以字节为单位的偏移量转换成以扇区为单位.</span></span><br><span class="line">  offset = (offset / SECTSIZE) + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// If this is too slow, we could read lots of sectors at a time.</span></span><br><span class="line">  <span class="comment">// We&#x27;d write more to memory than asked, but it doesn&#x27;t matter --</span></span><br><span class="line">  <span class="comment">// we load in increasing order.</span></span><br><span class="line">  <span class="keyword">while</span> (pa &lt; end_pa) &#123;</span><br><span class="line">    <span class="comment">// Since we haven&#x27;t enabled paging yet and we&#x27;re using</span></span><br><span class="line">    <span class="comment">// an identity segment mapping (see boot.S), we can</span></span><br><span class="line">    <span class="comment">// use physical addresses directly.  This won&#x27;t be the</span></span><br><span class="line">    <span class="comment">// case once JOS enables the MMU.</span></span><br><span class="line">    readsect((<span class="keyword">uint8_t</span> *)pa, offset);</span><br><span class="line">    pa += SECTSIZE;</span><br><span class="line">    offset++;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在了解了引导启动程序的源代码后, 可以大概阅读一下 obj/boot/boot.asm 文件, 这是引导启动程序反汇编出来的结果.</p>
 <blockquote>
-<p><strong>练习 III</strong>\<br>在引导扇区加载处 0x7c00 设置断点并追踪运行情况. 什么时候处理器开始执行 32 位代码? 是什么导致了 16 位模式到 32 位模式的转变? 引导启动程序的最后一条指令是什么? 内核加载后的第一条指令是什么?</p>
+<p><strong>练习 III</strong><br>在引导扇区加载处 0x7c00 设置断点并追踪运行情况. 什么时候处理器开始执行 32 位代码? 是什么导致了 16 位模式到 32 位模式的转变? 引导启动程序的最后一条指令是什么? 内核加载后的第一条指令是什么?</p>
 </blockquote>
 <p>在一个终端使用 <code>make qemu-gdb</code> 运行内核, 再打开另一个终端使用 <code>make gdb</code> 运行调试. 使用 <code>b *0x07c00</code> 设置 0x7c00 处的断点, 继续运行到断点位置, 之后使用 <code>si</code> 逐步查看: </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b *0x07c00</span><br><span class="line">Breakpoint 1 at 0x7c00</span><br><span class="line">(gdb) c</span><br><span class="line">Continuing.</span><br><span class="line">[   0:7c00] &#x3D;&gt; 0x7c00:  cli    </span><br><span class="line"></span><br><span class="line">Breakpoint 1, 0x00007c00 in ?? ()</span><br><span class="line">(gdb) si</span><br><span class="line">[   0:7c01] &#x3D;&gt; 0x7c01:  cld   </span><br></pre></td></tr></table></figure>
@@ -261,20 +341,21 @@
 <p>在 0x7d71 处设置断点, 发现内核加载后的第一条指令是 <code>movw  $0x1234, 0x472</code>:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b *0x7d71</span><br><span class="line">Breakpoint 1 at 0x7d71</span><br><span class="line">(gdb) c</span><br><span class="line">Continuing.</span><br><span class="line">The target architecture is assumed to be i386</span><br><span class="line">&#x3D;&gt; 0x7d71:  call   *0x10018</span><br><span class="line"></span><br><span class="line">Breakpoint 1, 0x00007d71 in ?? ()</span><br><span class="line">(gdb) si</span><br><span class="line">&#x3D;&gt; 0x10000c:  movw   $0x1234,0x472</span><br><span class="line">0x0010000c in ?? ()</span><br></pre></td></tr></table></figure>
 <h3 id="加载内核"><a href="#加载内核" class="headerlink" title="加载内核"></a>加载内核</h3><blockquote>
-<p><strong>练习 IV</strong>\<br>阅读一些关于 C 指针编程的资料. 这里推荐阅读 K&amp;R 的 <a target="_blank" rel="noopener" href="https://download.csdn.net/download/crocostone/3004464">C程序设计语言</a>.</p>
-<p><strong>练习 V</strong>\<br>改变 boot/Makefrag 中的链接地址, 重新编译内核观察并解释结果.</p>
+<p><strong>练习 IV</strong><br>阅读一些关于 C 指针编程的资料. 这里推荐阅读 K&amp;R 的 <a target="_blank" rel="noopener" href="https://download.csdn.net/download/crocostone/3004464">C程序设计语言</a>.  </p>
+<p><strong>练习 V</strong><br>改变 boot/Makefrag 中的链接地址, 重新编译内核观察并解释结果.</p>
 </blockquote>
 <p>把第 28 行中 <code>-Ttext 0x7C00</code> 改成 <code>-Ttext 0x7000</code>. <code>make clean</code> 之后重新编译, 把断点设在 0x7c00, 发现 <code>ljmp</code> 语句出错. 链接器计算内存地址是根据 boot/Makefrag 中的设置, 但是 BIOS 会把引导加载程序固定加载在 0x7c00, 于是导致了错误. </p>
 <blockquote>
-<p><strong>练习 VI</strong>\<br>在 BIOS 进入引导加载程序时查看内存地址 0x00100000 处的 8 个字. 再在 BIOS 进入内核时查看.</p>
+<p><strong>练习 VI</strong><br>在 BIOS 进入引导加载程序时查看内存地址 0x00100000 处的 8 个字. 再在 BIOS 进入内核时查看.</p>
 </blockquote>
-<p>在 0x7c00 处设置断点, 再在 0x7d71 处 (内核加载后第一条指令) 处设置断点:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b *0x7c00</span><br><span class="line">Breakpoint 1 at 0x7c00</span><br><span class="line">(gdb) b *0x7d71</span><br><span class="line">Breakpoint 2 at 0x7d71</span><br><span class="line">(gdb) c</span><br><span class="line">Continuing.</span><br><span class="line">[   0:7c00] &#x3D;&gt; 0x7c00:  cli    </span><br><span class="line"></span><br><span class="line">Breakpoint 1, 0x00007c00 in ?? ()</span><br><span class="line">(gdb) x&#x2F;8x 0x00100000</span><br><span class="line">0x100000:  0x00000000  0x00000000  0x00000000  0x00000000</span><br><span class="line">0x100010:  0x00000000  0x00000000  0x00000000  0x00000000</span><br><span class="line">(gdb) c</span><br><span class="line">Continuing.</span><br><span class="line">The target architecture is assumed to be i386</span><br><span class="line">&#x3D;&gt; 0x7d71:  call   *0x10018</span><br><span class="line"></span><br><span class="line">Breakpoint 2, 0x00007d71 in ?? ()</span><br><span class="line">(gdb) x&#x2F;8x 0x00100000</span><br><span class="line">0x100000:  0x1badb002  0x00000000  0xe4524ffe  0x7205c766</span><br><span class="line">0x100010:  0x34000004  0x0000b812  0x220f0011  0xc0200fd8</span><br></pre></td></tr></table></figure><br>发现结果并不一样, 原因之后会解释.</p>
+<p>在 0x7c00 处设置断点, 再在 0x7d71 处 (内核加载后第一条指令) 处设置断点:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b *0x7c00</span><br><span class="line">Breakpoint 1 at 0x7c00</span><br><span class="line">(gdb) b *0x7d71</span><br><span class="line">Breakpoint 2 at 0x7d71</span><br><span class="line">(gdb) c</span><br><span class="line">Continuing.</span><br><span class="line">[   0:7c00] &#x3D;&gt; 0x7c00:  cli    </span><br><span class="line"></span><br><span class="line">Breakpoint 1, 0x00007c00 in ?? ()</span><br><span class="line">(gdb) x&#x2F;8x 0x00100000</span><br><span class="line">0x100000:  0x00000000  0x00000000  0x00000000  0x00000000</span><br><span class="line">0x100010:  0x00000000  0x00000000  0x00000000  0x00000000</span><br><span class="line">(gdb) c</span><br><span class="line">Continuing.</span><br><span class="line">The target architecture is assumed to be i386</span><br><span class="line">&#x3D;&gt; 0x7d71:  call   *0x10018</span><br><span class="line"></span><br><span class="line">Breakpoint 2, 0x00007d71 in ?? ()</span><br><span class="line">(gdb) x&#x2F;8x 0x00100000</span><br><span class="line">0x100000:  0x1badb002  0x00000000  0xe4524ffe  0x7205c766</span><br><span class="line">0x100010:  0x34000004  0x0000b812  0x220f0011  0xc0200fd8</span><br></pre></td></tr></table></figure></p>
+<p>发现结果并不一样, 原因之后会解释.</p>
 <h2 id="进入内核"><a href="#进入内核" class="headerlink" title="进入内核"></a>进入内核</h2><h3 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h3><p>引导加载程序的链接地址 (Link Address) 和加载地址 (Load Address) 是不同的. 操作系统内核经常在虚拟地址的高处 (比如 0xf0100000) 链接和运行, 从而使得虚拟地址的低处能够为用户程序所使用. 关于这点, 下一个 lab 会提到.</p>
 <p>很多机器的物理内存很小, 没有 0xf0100000 这样的物理地址, 所以我们使用 MMU 来把虚拟地址 0xf0100000 (也就是链接地址) 映射到物理地址 0x00100000 (也就是加载地址, 引导加载程序把内核载入物理内存的位置). 于是内核的虚拟地址可以高到足以留下大片地址空间供用户使用, 但内核的物理地址还是在 1MB 处 (正好在 BIOS ROM 之上).</p>
 <p>在本 lab 中, 使用手写页表的方式来映射前 4MB 的物理地址 (见 kern/entrypgdir.c). </p>
 <p>内存引用默认使用物理地址. 直到 kern/entry.S 设置了 <code>CR0_PG</code> (i.e. <strong>C</strong>ontrol <strong>R</strong>egister <strong>P</strong>a<strong>g</strong>ing) 这个 flag, 内存引用就是虚拟地址了, 虚拟地址都会被转换成物理地址.</p>
 <blockquote>
-<p><strong>练习 VII</strong>\<br>使用 QEMU 和 GDB 追踪内核运行情况, 在 <code>movl  %eax, %cr0</code> 处停止. 检查 0x00100000 处和 0xf0100000 处的内存, 解释发生的现象. 把 kern/entry.S 中的 <code>movl  %eax, %cr0</code> 注释掉, 再运行内核并追踪, 解释发生的现象.</p>
+<p><strong>练习 VII</strong><br>使用 QEMU 和 GDB 追踪内核运行情况, 在 <code>movl  %eax, %cr0</code> 处停止. 检查 0x00100000 处和 0xf0100000 处的内存, 解释发生的现象. 把 kern/entry.S 中的 <code>movl  %eax, %cr0</code> 注释掉, 再运行内核并追踪, 解释发生的现象.</p>
 </blockquote>
 <p>不妨在 0x10000c 处使用 <code>b *0x10000c</code> 命令设置断点, 内核运行到断点处然后分步调试. </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b *0x10000c</span><br><span class="line">Breakpoint 1 at 0x10000c</span><br><span class="line">(gdb) c</span><br><span class="line">Continuing.</span><br><span class="line">The target architecture is assumed to be i386</span><br><span class="line">&#x3D;&gt; 0x10000c:  movw   $0x1234,0x472</span><br><span class="line"></span><br><span class="line">Breakpoint 1, 0x0010000c in ?? ()</span><br><span class="line">(gdb) si</span><br><span class="line">&#x3D;&gt; 0x100015:  mov    $0x110000,%eax</span><br><span class="line">&#x3D;&gt; 0x10001a:  mov    %eax,%cr3</span><br><span class="line">&#x3D;&gt; 0x10001d:  mov    %cr0,%eax</span><br><span class="line">&#x3D;&gt; 0x100020:  or     $0x80010001,%eax</span><br><span class="line">&#x3D;&gt; 0x100025:  mov    %eax,%cr0</span><br><span class="line">0x00100025 in ?? ()</span><br></pre></td></tr></table></figure>
@@ -293,7 +374,7 @@
 <p>再来看格式化输出的核心 lib/printfmt.c. 通过其中的 <code>vprintfmt</code> 函数可以实现格式化输出, 这个函数的具体实现很好理解 (有兴趣的话还可以对比一下 Linux 0.11 中的格式化输出).</p>
 <p>格式化输出的最上层就是 kern/printf.c, 其中 <code>cprintf</code> 就是内核使用的格式化输出函数.</p>
 <blockquote>
-<p><strong>练习 VIII</strong>\<br>示例代码删除了打印八进制数 (<code>&quot;%o&quot;</code>) 的一小段代码, 请在源代码中补充这一段.</p>
+<p><strong>练习 VIII</strong><br>示例代码删除了打印八进制数 (<code>&quot;%o&quot;</code>) 的一小段代码, 请在源代码中补充这一段.</p>
 </blockquote>
 <p>找到 lib/printfmt.c 中的 <code>vprintfmt</code> 函数, 修改 <code>// (unsigned) octal</code> 后的代码即可.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// (unsigned) octal</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&#x27;o&#x27;</span>:</span><br><span class="line">  <span class="comment">// 如果想在八进制输出的数字前面加 0, 就加这句.</span></span><br><span class="line">  <span class="comment">// putch(&#x27;0&#x27;, putdat);</span></span><br><span class="line">  num = getuint(&amp;ap, lflag);</span><br><span class="line">  base = <span class="number">8</span>;</span><br><span class="line">  <span class="keyword">goto</span> number;</span><br></pre></td></tr></table></figure>
@@ -385,7 +466,7 @@
 <p>有关更多大端序和小端序的讨论, 推荐阅读《深入理解计算机系统》和《格列佛游记》.</p>
 <blockquote>
 <p>我们大家都认为，吃鸡蛋前，原始的方法是打破鸡蛋<strong>较大的一端</strong>，可是当今皇帝的祖父小时候吃鸡蛋，一次按古法打鸡蛋时碰巧将一个手指弄破了。因此他的父亲，当时的皇帝，就下了一道敕令，命令全体臣民吃鸡蛋时打破鸡蛋<strong>较小的一端</strong>，违令者重罚。</p>
-<p><strong>挑战</strong>\<br>尝试让控制台能够打印不同颜色.</p>
+<p><strong>挑战</strong><br>尝试让控制台能够打印不同颜色.</p>
 </blockquote>
 <p>屏幕上显示的一个字符由两个字节来控制: 第一个字节是该字符的 ASCII 码, 第二个字节是该字符的颜色和其他控制信息. 第二个字节每一位的含义如下所示 (前 4 位控制背景, 后 4 位控制前景):</p>
 <div class="table-container">
@@ -416,16 +497,96 @@
 </tbody>
 </table>
 </div>
-<p>所以我们就得到了颜色控制表:<br>|   R   |   G   |   B   | 背景色 | 前景色 (I = 0) | 前景色 (I = 1) |<br>| :—-: | :—-: | :—-: | :——: | :——————: | :——————: |<br>|   0   |   0   |   0   |   黑   |       黑       |       灰       |<br>|   0   |   0   |   1   |   蓝   |       蓝       |      浅蓝      |<br>|   0   |   1   |   0   |   绿   |       绿       |      浅绿      |<br>|   0   |   1   |   1   |   青   |       青       |      浅青      |<br>|   1   |   0   |   0   |   红   |       红       |      浅红      |<br>|   1   |   0   |   1   |  品红  |      品红      |     浅品红     |<br>|   1   |   1   |   0   |   棕   |       棕       |       黄       |<br>|   1   |   1   |   1   |   白   |       白       |      亮白      |</p>
+<p>所以我们就得到了颜色控制表:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">R</th>
+<th style="text-align:center">G</th>
+<th style="text-align:center">B</th>
+<th style="text-align:center">背景色</th>
+<th style="text-align:center">前景色 (I = 0)</th>
+<th style="text-align:center">前景色 (I = 1)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">黑</td>
+<td style="text-align:center">黑</td>
+<td style="text-align:center">灰</td>
+</tr>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">蓝</td>
+<td style="text-align:center">蓝</td>
+<td style="text-align:center">浅蓝</td>
+</tr>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">绿</td>
+<td style="text-align:center">绿</td>
+<td style="text-align:center">浅绿</td>
+</tr>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">青</td>
+<td style="text-align:center">青</td>
+<td style="text-align:center">浅青</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">红</td>
+<td style="text-align:center">红</td>
+<td style="text-align:center">浅红</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">品红</td>
+<td style="text-align:center">品红</td>
+<td style="text-align:center">浅品红</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">棕</td>
+<td style="text-align:center">棕</td>
+<td style="text-align:center">黄</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">白</td>
+<td style="text-align:center">白</td>
+<td style="text-align:center">亮白</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>重新观察 <code>cga_putc</code> 中这一段:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// if no attribute given, then use black on white</span></span><br><span class="line"><span class="keyword">if</span> (!(c &amp; ~<span class="number">0xFF</span>)) c |= <span class="number">0x0700</span>;</span><br></pre></td></tr></table></figure>
 <p>这里 0x07 的含义就是 <code>KRGBIRGB = 00000111</code>, 即给字符设置黑色背景白色前景. 假如我们想要设置红色背景, 黄色前景, 由颜色控制表可知 <code>KRGBIRGB = 01001110</code>, 也就是 0x4e. 把上面的代码改成</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!(c &amp; ~<span class="number">0xFF</span>)) c |= <span class="number">0x4e00</span>;</span><br></pre></td></tr></table></figure>
 <p>再次 <code>make qemu</code> 运行, 结果符合预期.</p>
-<p><img src="/2021/07/13/kernel/1/color.png" width="600"></p>
+<p><img src="/images/color.png" width="600"></p>
 <h3 id="堆栈"><a href="#堆栈" class="headerlink" title="堆栈"></a>堆栈</h3><p>作为本 lab 的最后一个模块, 我们将探询 C 语言使用栈的更多细节, 并在此过程中编写一个新的内核监视函数用于打印堆栈的回溯 (即查看 <code>IP</code> 值的变化).</p>
 <blockquote>
-<p><strong>练习 IX</strong>\<br>内核是在哪里初始化堆栈的? 堆栈在内存的什么位置? 内核是如何为堆栈保留空间的? 堆栈指针指向高位还是低位?</p>
+<p><strong>练习 IX</strong><br>内核是在哪里初始化堆栈的? 堆栈在内存的什么位置? 内核是如何为堆栈保留空间的? 堆栈指针指向高位还是低位?</p>
 </blockquote>
 <p>阅读 kern/entry.S, 其中初始化了 <code>ebp</code> 和 <code>esp</code> 的是这一段:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Clear the frame pointer register (EBP)</span><br><span class="line"># so that once we get into debugging C code,</span><br><span class="line"># stack backtraces will be terminated properly.</span><br><span class="line">movl  $0x0,%ebp      # nuke frame pointer</span><br><span class="line"></span><br><span class="line"># Set the stack pointer</span><br><span class="line">movl  $(bootstacktop),%esp</span><br></pre></td></tr></table></figure></p>
 <p>在 kern/entry.S 的 <code>movl $0x0, %ebp</code> (74 行) 处设置断点:</p>
@@ -435,7 +596,7 @@
 <p>ebp (基址指针) 寄存器则相反, 它主要靠软件约定来和堆栈联系起来. 在进入一个 C 函数时, 函数的序言代码通常把上一个函数的基址指针压入堆栈, 然后把当前 esp 值复制进 ebp. 如果软件中所有函数遵循这样的约定, 那么在函数执行的任意时刻, 都可以通过查看保存的 ebp 指针链来追踪堆栈并查明是什么函数调用导致了程序进入当前时刻的状态. 举例来看, 如果某函数因为传递了错误参数触发了 <code>panic</code>, 栈追踪 (stack trace/backtrace) 就能找到是哪个函数传递了错误参数.</p>
 <p>堆栈从内存高位向低位生长，故堆栈指针应该指向高位.</p>
 <blockquote>
-<p><strong>练习 X</strong>\<br>熟悉 x86 的 C 调用约定, 找到 obj/kern/kernel.asm 中 <code>test_backtrace</code> 函数的地址并在地址处设置断点, 观察结果. </p>
+<p><strong>练习 X</strong><br>熟悉 x86 的 C 调用约定, 找到 obj/kern/kernel.asm 中 <code>test_backtrace</code> 函数的地址并在地址处设置断点, 观察结果. </p>
 </blockquote>
 <p>在 <code>mon_backtrace(0, 0, 0);</code> (kern/init.c, 16 行) 处设置断点:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b kern&#x2F;init.c : 16</span><br><span class="line">Breakpoint 1 at 0xf0100081: file kern&#x2F;init.c, line 16.</span><br><span class="line">(gdb) c</span><br><span class="line">Continuing.</span><br><span class="line">The target architecture is assumed to be i386</span><br><span class="line">&#x3D;&gt; 0xf0100081 &lt;test_backtrace+65&gt;:  sub    $0x4,%esp</span><br><span class="line"></span><br><span class="line">Breakpoint 1, test_backtrace (x&#x3D;0) at kern&#x2F;init.c:16</span><br><span class="line">warning: Source file is more recent than executable.</span><br><span class="line">16      mon_backtrace(0, 0, 0);</span><br><span class="line">(gdb) x&#x2F;52x $esp</span><br><span class="line">0xf010ff20:  0x00000000  0x00000000  0x00000000  0x00000000</span><br><span class="line">0xf010ff30:  0xf0100902  0x00000001  0xf010ff58  0xf0100068</span><br><span class="line">0xf010ff40:  0x00000000  0x00000001  0xf010ff78  0x00000000</span><br><span class="line">0xf010ff50:  0xf0100902  0x00000002  0xf010ff78  0xf0100068</span><br><span class="line">0xf010ff60:  0x00000001  0x00000002  0xf010ff98  0x00000000</span><br><span class="line">0xf010ff70:  0xf0100902  0x00000003  0xf010ff98  0xf0100068</span><br><span class="line">0xf010ff80:  0x00000002  0x00000003  0x00000000  0x00000000</span><br><span class="line">0xf010ff90:  0x00000000  0x00000004  0xf010ffb8  0xf0100068</span><br><span class="line">0xf010ffa0:  0x00000003  0x00000004  0x00000000  0x00000000</span><br><span class="line">0xf010ffb0:  0x00000000  0x00000005  0xf010ffd8  0xf0100068</span><br><span class="line">0xf010ffc0:  0x00000004  0x00000005  0x00000000  0x00010074</span><br><span class="line">0xf010ffd0:  0x00010074  0x00010074  0xf010fff8  0xf01000c2</span><br><span class="line">0xf010ffe0:  0x00000005  0x00000000  0x00000640  0x00000000</span><br><span class="line">0xf010fff0:  0x00000000  0x00000000  0x00000000  0xf010003e</span><br></pre></td></tr></table></figure>
@@ -476,7 +637,7 @@
 <p>因为判断参数个数是在编译期完成的, 函数内部没有办法直接获取参数个数. 解决方法模仿 C 语言 <code>main</code> 函数, 把函数的第一个参数设置为参数个数 <code>argc</code> 即可.</p>
 <p>大部分 C 程序很少需要进行指针和整型之间的转换, 但是这样的操作在内核中很常见. 任何时候看到涉及到内存地址的加法运算, 都要考虑它是整数加法还是指针加法 (其实这一点在学校课程的操作系统实验中就已经遇见过了, 我做学校课程某个 lab 的时候也因为这个问题 debug 了好长时间).</p>
 <blockquote>
-<p><strong>练习 XI</strong>\<br>实现 <code>mon_backtrace()</code> 函数 (kern/monitor.c). 为了方便打分, 请使用和示例一样的格式.</p>
+<p><strong>练习 XI</strong><br>实现 <code>mon_backtrace()</code> 函数 (kern/monitor.c). 为了方便打分, 请使用和示例一样的格式.</p>
 </blockquote>
 <p>补充代码如下:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mon_backtrace</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv, struct Trapframe *tf)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Your code here.</span></span><br><span class="line">  <span class="keyword">uint32_t</span> ebp, *ptr;</span><br><span class="line">  ebp = read_ebp();</span><br><span class="line">  cprintf(<span class="string">&quot;Stack backtrace:\n&quot;</span>);</span><br><span class="line">  <span class="keyword">while</span> (ebp != <span class="number">0</span>) &#123;</span><br><span class="line">    ptr = (<span class="keyword">uint32_t</span> *)ebp;</span><br><span class="line">    cprintf(<span class="string">&quot;  ebp %x  eip %x  args %08x %08x %08x %08x %08x\n&quot;</span>, </span><br><span class="line">            ebp, ptr[<span class="number">1</span>], ptr[<span class="number">2</span>], ptr[<span class="number">3</span>], ptr[<span class="number">4</span>], ptr[<span class="number">5</span>], ptr[<span class="number">6</span>]);</span><br><span class="line">    ebp = *ptr;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -485,7 +646,7 @@
 <p>使用 <code>backtrace</code> 命令, 运行结果如下:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Welcome to the JOS kernel monitor!</span><br><span class="line">Type &#39;help&#39; for a list of commands.</span><br><span class="line">K&gt; backtrace</span><br><span class="line">Stack backtrace:</span><br><span class="line">  ebp f010ff68  eip f01008a4  args 00000001 f010ff80 00000000 f010ffc8 f0112540</span><br><span class="line">  ebp f010ffd8  eip f01000e1  args 00000000 00001aac 00000640 00000000 00000000</span><br><span class="line">  ebp f010fff8  eip f010003e  args 00111021 00000000 00000000 00000000 00000000</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p><strong>练习 XII</strong>\<br>修改栈追踪函数, 使之能够显示函数名, 源文件名和行数. 已经在 kern/kdebug.c 中提供了 <code>debuginfo_eip</code> 函数, 它能够在符号表中查找 <code>eip</code> 然后返回其地址的调试信息. 在 <code>debuginfo_eip</code> 中插入 <code>stab_binsearch</code> 来实现对行号的二分查找. 然后补充 <code>mon_backtrace</code> 函数来实现如下格式的输出:</p>
+<p><strong>练习 XII</strong><br>修改栈追踪函数, 使之能够显示函数名, 源文件名和行数. 已经在 kern/kdebug.c 中提供了 <code>debuginfo_eip</code> 函数, 它能够在符号表中查找 <code>eip</code> 然后返回其地址的调试信息. 在 <code>debuginfo_eip</code> 中插入 <code>stab_binsearch</code> 来实现对行号的二分查找. 然后补充 <code>mon_backtrace</code> 函数来实现如下格式的输出:</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">K&gt; backtrace</span><br><span class="line">Stack backtrace:</span><br><span class="line">  ebp f010ff78  eip f01008ae  args 00000001 f010ff8c 00000000 f0110580 00000000</span><br><span class="line">         kern&#x2F;monitor.c:143: monitor+106</span><br><span class="line">  ebp f010ffd8  eip f0100193  args 00000000 00001aac 00000660 00000000 00000000</span><br><span class="line">         kern&#x2F;init.c:49: i386_init+59</span><br><span class="line">  ebp f010fff8  eip f010003d  args 00000000 00000000 0000ffff 10cf9a00 0000ffff</span><br><span class="line">         kern&#x2F;entry.S:70: &lt;unknown&gt;+0</span><br><span class="line">K&gt; </span><br></pre></td></tr></table></figure>
 <p>首先在 <code>debuginfo_eip</code> 中补充二分查找代码. <code>stab_binsearch</code> 函数是已经写好的, 我们只需要判断一下是否查到就行了:</p>
@@ -507,6 +668,7 @@
 <p>再次使用 <code>make grade</code> 命令, 查看最终得分:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">lab$ make grade</span><br><span class="line">&#x2F;Library&#x2F;Developer&#x2F;CommandLineTools&#x2F;usr&#x2F;bin&#x2F;make clean</span><br><span class="line">rm -rf obj .gdbinit jos.in qemu.log</span><br><span class="line">.&#x2F;grade-lab1 </span><br><span class="line">+ as kern&#x2F;entry.S</span><br><span class="line">+ cc kern&#x2F;entrypgdir.c</span><br><span class="line">+ cc kern&#x2F;init.c</span><br><span class="line">+ cc kern&#x2F;console.c</span><br><span class="line">+ cc kern&#x2F;monitor.c</span><br><span class="line">+ cc kern&#x2F;printf.c</span><br><span class="line">+ cc kern&#x2F;kdebug.c</span><br><span class="line">+ cc lib&#x2F;printfmt.c</span><br><span class="line">+ cc lib&#x2F;readline.c</span><br><span class="line">+ cc lib&#x2F;string.c</span><br><span class="line">+ ld obj&#x2F;kern&#x2F;kernel</span><br><span class="line">i386-elf-ld: warning: section &#96;.bss&#39; type changed to PROGBITS</span><br><span class="line">+ as boot&#x2F;boot.S</span><br><span class="line">+ cc -Os boot&#x2F;main.c</span><br><span class="line">+ ld boot&#x2F;boot</span><br><span class="line">boot block is 396 bytes (max 510)</span><br><span class="line">+ mk obj&#x2F;kern&#x2F;kernel.img</span><br><span class="line">running JOS: (0.6s) </span><br><span class="line">  printf: OK </span><br><span class="line">  backtrace count: OK </span><br><span class="line">  backtrace arguments: OK </span><br><span class="line">  backtrace symbols: OK </span><br><span class="line">  backtrace lines: OK </span><br><span class="line">Score: 50&#x2F;50</span><br></pre></td></tr></table></figure>
 <p>如果得分为满分, 则意味着本 lab 圆满完成, 可喜可贺.</p>
+<p><strong><center>STAGE 1 CLEAR</center></strong></p>
 
     </div>
 
@@ -515,6 +677,10 @@
     
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 操作系统</a>
+          </div>
 
         
 
@@ -522,8 +688,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/08/23/latin_translation/3/" rel="prev" title="《韦洛克拉丁语教程》古代名言翻译（三）">
-      <i class="fa fa-chevron-left"></i> 《韦洛克拉丁语教程》古代名言翻译（三）
+    <a href="/2020/08/21/salve_munde/" rel="prev" title="Salve Munde">
+      <i class="fa fa-chevron-left"></i> Salve Munde
     </a></div>
       <div class="post-nav-item"></div>
     </div>
@@ -584,7 +750,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%BD%E5%AF%BB%E7%89%B9%E5%A4%A7%E5%9E%8B-OS-%E5%86%85%E6%A0%B8%E4%B9%8B%E8%B0%9C-Stage-1"><span class="nav-number">1.</span> <span class="nav-text">追寻特大型 OS 内核之谜 Stage 1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PC-%E6%9C%BA%E7%9A%84%E5%BC%95%E5%AF%BC%E5%90%AF%E5%8A%A8"><span class="nav-number">1.1.</span> <span class="nav-text">PC 机的引导启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E-x86-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%BC%80%E5%A7%8B%E2%80%A6"><span class="nav-number">1.1.1.</span> <span class="nav-text">从 x86 汇编语言开始…</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A8%A1%E6%8B%9F-x86"><span class="nav-number">1.1.2.</span> <span class="nav-text">使用虚拟机模拟 x86</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PC-%E6%9C%BA%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-number">1.1.3.</span> <span class="nav-text">PC 机的物理内存地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROM-BIOS"><span class="nav-number">1.1.4.</span> <span class="nav-text">ROM BIOS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%AF%BC%E5%8A%A0%E8%BD%BD%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.2.</span> <span class="nav-text">引导加载程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E5%86%85%E6%A0%B8"><span class="nav-number">1.2.1.</span> <span class="nav-text">加载内核</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E5%86%85%E6%A0%B8"><span class="nav-number">1.3.</span> <span class="nav-text">进入内核</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">1.3.1.</span> <span class="nav-text">虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA"><span class="nav-number">1.3.2.</span> <span class="nav-text">格式化输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A0%86%E6%A0%88"><span class="nav-number">1.3.3.</span> <span class="nav-text">堆栈</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%BE%97%E5%88%86"><span class="nav-number">1.4.</span> <span class="nav-text">查看得分</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PC-%E6%9C%BA%E7%9A%84%E5%BC%95%E5%AF%BC%E5%90%AF%E5%8A%A8"><span class="nav-number">1.</span> <span class="nav-text">PC 机的引导启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E-x86-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%BC%80%E5%A7%8B%E2%80%A6"><span class="nav-number">1.1.</span> <span class="nav-text">从 x86 汇编语言开始…</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A8%A1%E6%8B%9F-x86"><span class="nav-number">1.2.</span> <span class="nav-text">使用虚拟机模拟 x86</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PC-%E6%9C%BA%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-number">1.3.</span> <span class="nav-text">PC 机的物理内存地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROM-BIOS"><span class="nav-number">1.4.</span> <span class="nav-text">ROM BIOS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%AF%BC%E5%8A%A0%E8%BD%BD%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">引导加载程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E5%86%85%E6%A0%B8"><span class="nav-number">2.1.</span> <span class="nav-text">加载内核</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E5%86%85%E6%A0%B8"><span class="nav-number">3.</span> <span class="nav-text">进入内核</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">3.1.</span> <span class="nav-text">虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA"><span class="nav-number">3.2.</span> <span class="nav-text">格式化输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A0%86%E6%A0%88"><span class="nav-number">3.3.</span> <span class="nav-text">堆栈</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%BE%97%E5%88%86"><span class="nav-number">4.</span> <span class="nav-text">查看得分</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -600,7 +766,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -613,7 +779,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
